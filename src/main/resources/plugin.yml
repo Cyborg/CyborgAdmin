@@ -1,0 +1,5 @@
+name: ${project.name}
+version: ${version}
+main: ${main.class}
+description: ${project.description}
+depends: [CyborgPerms]
