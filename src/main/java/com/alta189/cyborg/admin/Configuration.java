@@ -16,18 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.admin;
 
-import java.io.File;
-
 import com.alta189.cyborg.api.exception.ConfigurationException;
-import com.alta189.cyborg.api.util.config.ConfigurationHolder;
 import com.alta189.cyborg.api.util.config.ConfigurationHolderConfiguration;
 import com.alta189.cyborg.api.util.config.yaml.YamlConfiguration;
+import java.io.File;
 
 public class Configuration extends ConfigurationHolderConfiguration {
-
 	public Configuration(File file) {
 		super(new YamlConfiguration(file));
 	}

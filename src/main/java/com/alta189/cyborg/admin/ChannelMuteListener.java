@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.admin;
 
 import com.alta189.cyborg.api.event.EventHandler;
@@ -27,7 +26,6 @@ import com.alta189.cyborg.api.event.bot.SendMessageEvent;
 import com.alta189.cyborg.api.event.bot.SendNoticeEvent;
 
 public class ChannelMuteListener implements Listener {
-
 	@EventHandler(order = Order.EARLIEST)
 	public void onSendAction(SendActionEvent event) {
 		if (event.getTarget().startsWith("#")) {
@@ -54,5 +52,4 @@ public class ChannelMuteListener implements Listener {
 			}
 		}
 	}
-
 }

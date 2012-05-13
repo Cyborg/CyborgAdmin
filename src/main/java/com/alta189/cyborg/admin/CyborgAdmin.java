@@ -16,36 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.admin;
 
+import com.alta189.cyborg.api.command.annotation.EmptyConstructorInjector;
+import com.alta189.cyborg.api.plugin.CommonPlugin;
+import com.alta189.cyborg.api.util.yaml.YAMLFormat;
+import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Level;
 
-import com.alta189.cyborg.api.command.annotation.EmptyConstructorInjector;
-import com.alta189.cyborg.api.plugin.CommonPlugin;
-import com.alta189.cyborg.api.util.yaml.YAMLFormat;
-import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
-
 public class CyborgAdmin extends CommonPlugin {
-
 	@Override
 	public void onEnable() {
 		getLogger().log(Level.INFO, "Enabling...");
-		
+
 		Config.setConfig(setupConfig(new File(getDataFolder(), "config.yml")));
 		try {
 			Config.getConfig().load();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		getCyborg().getEventManager().registerEvents(new ChannelMuteListener(), this);
 		getCyborg().getCommandManager().registerCommands(this, AdminCommands.class, new EmptyConstructorInjector());
-		
+
 		getLogger().log(Level.INFO, "Successfully enabled!");
 	}
 
@@ -63,8 +60,9 @@ public class CyborgAdmin extends CommonPlugin {
 				if (input != null) {
 					FileOutputStream output = null;
 					try {
-						if (file.getParentFile() != null)
+						if (file.getParentFile() != null) {
 							file.getParentFile().mkdirs();
+						}
 						output = new FileOutputStream(file);
 						byte[] buf = new byte[8192];
 						int length;
@@ -72,7 +70,6 @@ public class CyborgAdmin extends CommonPlugin {
 						while ((length = input.read(buf)) > 0) {
 							output.write(buf, 0, length);
 						}
-
 					} catch (Exception e) {
 						e.printStackTrace();
 					} finally {
@@ -81,8 +78,9 @@ public class CyborgAdmin extends CommonPlugin {
 						} catch (Exception ignored) {
 						}
 						try {
-							if (output != null)
+							if (output != null) {
 								output.close();
+							}
 						} catch (Exception e) {
 						}
 					}

@@ -16,32 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package com.alta189.cyborg.admin;
 
+import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.alta189.cyborg.api.util.yaml.YAMLNode;
-import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
-
 public class Config {
-	
 	private static YAMLProcessor config;
 	private static final List<String> mutedChans = new ArrayList<String>();
+
 	public static void setConfig(YAMLProcessor config) {
 		Config.config = config;
 	}
-	
+
 	public static YAMLProcessor getConfig() {
 		return config;
 	}
-	
+
 	public static List<String> getMutedChannels() {
 		return mutedChans;
 	}
-	
+
 	public static void addMutedChannel(String channel) {
 		mutedChans.add(channel.toLowerCase());
 	}
@@ -49,9 +45,8 @@ public class Config {
 	public static void removeMutedChannel(String channel) {
 		mutedChans.remove(channel.toLowerCase());
 	}
-	
+
 	public static boolean isChannelMuted(String channel) {
 		return getMutedChannels().contains(channel.toLowerCase());
 	}
-	
 }
