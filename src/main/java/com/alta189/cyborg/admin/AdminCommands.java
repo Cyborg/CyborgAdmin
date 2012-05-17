@@ -118,14 +118,14 @@ public class AdminCommands {
 			return "You don't have permission!";
 		}
 		if (context.getArgs() == null || context.getArgs().length < 2) {
-			return "Correct usage is " + (source.getSource() == CommandSource.Source.USER ? "." : "") + "notice <target> <message>";
+			return "Correct usage is " + (source.getSource() == CommandSource.Source.USER ? "." : "") + "notice <target> <notice>";
 		}
 		String message = StringUtils.toString(context.getArgs(), 1, " ");
 		Cyborg.getInstance().sendNotice(context.getArgs()[0], message);
 		return null;
 	}
 
-	@Command(name = "action", desc = "Sends action to target", aliases = {"a"})
+	@Command(name = "action", desc = "Sends action to target", aliases = {"a", "act"})
 	public String action(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -134,7 +134,7 @@ public class AdminCommands {
 			return "You don't have permission!";
 		}
 		if (context.getArgs() == null || context.getArgs().length < 2) {
-			return "Correct usage is " + (source.getSource() == CommandSource.Source.USER ? "." : "") + "action <target> <message>";
+			return "Correct usage is " + (source.getSource() == CommandSource.Source.USER ? "." : "") + "action <target> <action>";
 		}
 		String message = StringUtils.toString(context.getArgs(), 1, " ");
 		Cyborg.getInstance().sendAction(context.getArgs()[0], message);
