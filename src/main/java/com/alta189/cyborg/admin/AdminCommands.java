@@ -211,10 +211,15 @@ public class AdminCommands {
 		int i = 0;
 		for (MutedChannel chan : Config.getMutedChannels()) {
 			i++;
-			builder.append(chan.getName());
-			if (i != Config.getMutedChannels().size() - 1) {
-				builder.append(", ");
+			if (chan.isMuted()) {
+				builder.append(chan.getName());
+				if (i <= Config.getMutedChannels().size()) {
+					builder.append(", ");
+				}
 			}
+		}
+		if (builder.toString().equalsIgnoreCase("Muted channels: ")) {
+			builder = new StringBuilder().append("There are no muted channels");
 		}
 		return result.setReturnType(ReturnType.MESSAGE).setBody(builder.toString()).setTarget(context.getLocationType() == CommandContext.LocationType.CHANNEL ? context.getLocation() : source.getUser().getNick());
 	}
