@@ -209,10 +209,10 @@ public class AdminCommands {
 		StringBuilder builder = new StringBuilder();
 		builder.append("Muted channels: ");
 		int i = 0;
-		for (String chan : Config.getMutedChannels()) {
+		for (MutedChannel chan : Config.getMutedChannels()) {
 			i++;
-			builder.append(chan);
-			if (i != Config.getMutedChannels().size()) {
+			builder.append(chan.getName());
+			if (i != Config.getMutedChannels().size() - 1) {
 				builder.append(", ");
 			}
 		}

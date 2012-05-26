@@ -21,11 +21,17 @@ package com.alta189.cyborg.admin;
 import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import static com.alta189.cyborg.admin.CyborgAdmin.getDatabase;
 
 public class Config {
 	private static YAMLProcessor config;
-	private static final List<String> mutedChans = new ArrayList<String>();
+	private static Map<String, MutedChannel> mutedChans = new HashMap<String, MutedChannel>();
 
 	public static void setConfig(YAMLProcessor config) {
 		Config.config = config;
@@ -35,19 +41,45 @@ public class Config {
 		return config;
 	}
 
-	public static List<String> getMutedChannels() {
-		return mutedChans;
+	public static Collection<MutedChannel> getMutedChannels() {
+		return mutedChans.values();
 	}
 
 	public static void addMutedChannel(String channel) {
-		mutedChans.add(channel.toLowerCase());
+		MutedChannel mutedChannel = mutedChans.get(channel.toLowerCase());
+		if (mutedChannel == null) {
+			mutedChannel = new MutedChannel().setName(channel).setMuted(true);
+			mutedChans.put(channel.toLowerCase(), mutedChannel);
+		} else {
+			mutedChannel.setMuted(true);
+		}
 	}
 
 	public static void removeMutedChannel(String channel) {
-		mutedChans.remove(channel.toLowerCase());
+		MutedChannel mutedChannel = mutedChans.get(channel.toLowerCase());
+		if (mutedChannel == null) {
+			mutedChannel = new MutedChannel().setName(channel).setMuted(false);
+			mutedChans.put(channel.toLowerCase(), mutedChannel);
+		} else {
+			mutedChannel.setMuted(false);
+		}
 	}
 
 	public static boolean isChannelMuted(String channel) {
-		return getMutedChannels().contains(channel.toLowerCase());
+		MutedChannel mutedChannel = mutedChans.get(channel.toLowerCase());
+		return mutedChannel != null && mutedChannel.isMuted();
+	}
+
+	public static void load() {
+		List<MutedChannel> channels = getDatabase().select(MutedChannel.class).execute().find();
+		for (MutedChannel chan : channels) {
+			mutedChans.put(chan.getName().toLowerCase(), chan);
+		}
+	}
+
+	public static void save() {
+		for (MutedChannel chan : mutedChans.values()) {
+			getDatabase().save(MutedChannel.class, chan);
+		}
 	}
 }

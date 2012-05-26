@@ -22,6 +22,12 @@ import com.alta189.cyborg.api.command.annotation.EmptyConstructorInjector;
 import com.alta189.cyborg.api.plugin.CommonPlugin;
 import com.alta189.cyborg.api.util.yaml.YAMLFormat;
 import com.alta189.cyborg.api.util.yaml.YAMLProcessor;
+import com.alta189.simplesave.Database;
+import com.alta189.simplesave.DatabaseFactory;
+import com.alta189.simplesave.exceptions.ConnectionException;
+import com.alta189.simplesave.exceptions.TableRegistrationException;
+import com.alta189.simplesave.mysql.MySQLConfiguration;
+import com.alta189.simplesave.mysql.MySQLConstants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,8 +36,12 @@ import java.io.InputStream;
 import java.util.logging.Level;
 
 public class CyborgAdmin extends CommonPlugin {
+	private static CyborgAdmin instance;
+	private Database db;
+
 	@Override
 	public void onEnable() {
+		instance = this;
 		getLogger().log(Level.INFO, "Enabling...");
 
 		Config.setConfig(setupConfig(new File(getDataFolder(), "config.yml")));
@@ -40,6 +50,29 @@ public class CyborgAdmin extends CommonPlugin {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		MySQLConfiguration dbConfig = new MySQLConfiguration();
+		dbConfig.setHost(Config.getConfig().getString("database.mysql.host", "127.0.0.1"));
+		dbConfig.setPort(Config.getConfig().getInt("database.mysql.port", MySQLConstants.DefaultPort));
+		dbConfig.setDatabase(Config.getConfig().getString("database.mysql.database"));
+		dbConfig.setUser(Config.getConfig().getString("database.mysql.user", MySQLConstants.DefaultUser));
+		dbConfig.setPassword(Config.getConfig().getString("database.mysql.password", MySQLConstants.DefaultPass));
+
+		db = DatabaseFactory.createNewDatabase(dbConfig);
+
+		try {
+			getDatabase().registerTable(MutedChannel.class);
+		} catch (TableRegistrationException e) {
+			e.printStackTrace();
+		}
+
+		try {
+			getDatabase().connect();
+		} catch (ConnectionException e) {
+			e.printStackTrace();
+		}
+
+		Config.load();
 
 		getCyborg().getEventManager().registerEvents(new ChannelMuteListener(), this);
 		getCyborg().getCommandManager().registerCommands(this, AdminCommands.class, new EmptyConstructorInjector());
@@ -51,7 +84,18 @@ public class CyborgAdmin extends CommonPlugin {
 	public void onDisable() {
 		getLogger().log(Level.INFO, "Disabling...");
 		Config.getConfig().save();
+		Config.save();
+		try {
+			getDatabase().close();
+		} catch (ConnectionException e) {
+			e.printStackTrace();
+		}
 		getLogger().log(Level.INFO, "Successfully disabled!");
+		instance = null;
+	}
+
+	public static Database getDatabase() {
+		return instance.db;
 	}
 
 	private YAMLProcessor setupConfig(File file) {
