@@ -21,6 +21,7 @@ package com.alta189.cyborg.admin;
 import com.alta189.cyborg.api.exception.ConfigurationException;
 import com.alta189.cyborg.api.util.config.ConfigurationHolderConfiguration;
 import com.alta189.cyborg.api.util.config.yaml.YamlConfiguration;
+
 import java.io.File;
 
 public class Configuration extends ConfigurationHolderConfiguration {
