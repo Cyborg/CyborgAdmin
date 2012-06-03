@@ -24,6 +24,7 @@ import com.alta189.cyborg.api.command.CommandResult;
 import com.alta189.cyborg.api.command.CommandSource;
 import com.alta189.cyborg.api.command.ReturnType;
 import com.alta189.cyborg.api.command.annotation.Command;
+import com.alta189.cyborg.api.command.annotation.Usage;
 import com.alta189.cyborg.api.util.StringUtils;
 import org.pircbotx.Channel;
 
@@ -31,6 +32,7 @@ import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class AdminCommands {
 	@Command(name = "disconnect", desc = "Mutes the bot in a specific channel", aliases = {"dc", "quit", "exit"})
+	@Usage(".disconnect")
 	public CommandResult disconnect(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -48,6 +50,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "joinchannel", desc = "Sends message to target", aliases = {"j", "jc", "join"})
+	@Usage(".joinchannel <channel> [key]")
 	public CommandResult joinchannel(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -72,6 +75,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "partchannel", desc = "Sends message to target", aliases = {"p", "pc", "part"})
+	@Usage(".partchannel <channel> [key]")
 	public CommandResult partchannel(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -101,6 +105,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "echo", desc = "Sends message to target", aliases = {"e", "say"})
+	@Usage(".echo <target> <message>")
 	public CommandResult echo(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -118,6 +123,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "notice", desc = "Sends notice to target", aliases = {"n"})
+	@Usage(".notice <target> <notice>")
 	public CommandResult notice(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -135,6 +141,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "action", desc = "Sends action to target", aliases = {"a", "act"})
+	@Usage(".action <target> <action>")
 	public CommandResult action(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -152,6 +159,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "mute", desc = "Mutes the bot in a specific channel")
+	@Usage(".mute <channel>")
 	public CommandResult muteCommand(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -175,6 +183,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "unmute", desc = "Unutes the bot in a specific channel")
+	@Usage(".unmute <channel>")
 	public CommandResult unmuteCommand(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
@@ -198,6 +207,7 @@ public class AdminCommands {
 	}
 
 	@Command(name = "listmute", desc = "Unutes the bot in a specific channel")
+	@Usage(".listmute")
 	public CommandResult listmute(CommandSource source, CommandContext context) {
 		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
 			return null;
