@@ -22,7 +22,7 @@ import com.alta189.simplesave.Field;
 import com.alta189.simplesave.Id;
 import com.alta189.simplesave.Table;
 
-@Table(name = "mutedchannels")
+@Table("mutedchannels")
 public class MutedChannel {
 
 	@Id
