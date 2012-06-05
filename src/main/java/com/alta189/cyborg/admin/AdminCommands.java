@@ -26,8 +26,11 @@ import com.alta189.cyborg.api.command.ReturnType;
 import com.alta189.cyborg.api.command.annotation.Command;
 import com.alta189.cyborg.api.command.annotation.Usage;
 import com.alta189.cyborg.api.util.StringUtils;
+import org.apache.commons.io.FileUtils;
 import org.pircbotx.Channel;
 
+import static com.alta189.cyborg.api.command.CommandResultUtil.get;
+import static com.alta189.cyborg.perms.PermissionManager.getGroup;
 import static com.alta189.cyborg.perms.PermissionManager.hasPerm;
 
 public class AdminCommands {
@@ -232,5 +235,57 @@ public class AdminCommands {
 			builder = new StringBuilder().append("There are no muted channels");
 		}
 		return result.setReturnType(ReturnType.MESSAGE).setBody(builder.toString()).setTarget(context.getLocationType() == CommandContext.LocationType.CHANNEL ? context.getLocation() : source.getUser().getNick());
+	}
+
+	@Command(name = "memory", desc = "Returns information on the JVM's memory usage", aliases = {"mem"})
+	@Usage(".memory")
+	public CommandResult memory(CommandSource source, CommandContext context) {
+		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
+			return null;
+		}
+		CommandResult result = new CommandResult();
+		if (source.getSource() == CommandSource.Source.USER && !hasPerm(source.getUser(), "admin.memory")) {
+			return result.setReturnType(ReturnType.NOTICE).setBody("You don't have permission!").setTarget(source.getUser().getNick());
+		}
+		String freeMemory = FileUtils.byteCountToDisplaySize(Runtime.getRuntime().freeMemory());
+		String maxMemory = FileUtils.byteCountToDisplaySize(Runtime.getRuntime().maxMemory());
+		String totalMemory = FileUtils.byteCountToDisplaySize(Runtime.getRuntime().totalMemory());
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("Maximum Mem: ").append(maxMemory).append(", Used Memory: ").append(totalMemory).append(", Free Memeory: ").append(freeMemory);
+		return get(ReturnType.MESSAGE, builder.toString(), source, context);
+	}
+
+	@Command(name = "cores", desc = "Returns the number of cores available to the JVM")
+	@Usage(".cores")
+	public CommandResult cores(CommandSource source, CommandContext context) {
+		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
+			return null;
+		}
+		CommandResult result = new CommandResult();
+		if (source.getSource() == CommandSource.Source.USER && !hasPerm(source.getUser(), "admin.cores")) {
+			return result.setReturnType(ReturnType.NOTICE).setBody("You don't have permission!").setTarget(source.getUser().getNick());
+		}
+		int availableCores = Runtime.getRuntime().availableProcessors();
+
+		StringBuilder builder = new StringBuilder();
+		builder.append("Available Cores: ").append(availableCores);
+		return get(ReturnType.MESSAGE, builder.toString(), source, context);
+	}
+
+	@Command(name = "gc", desc = "Asks the JVM to run the Garbage Collector")
+	@Usage(".gc")
+	public CommandResult gc(CommandSource source, CommandContext context) {
+		if (source.getSource() == CommandSource.Source.USER && (context.getPrefix() == null || !context.getPrefix().equals("."))) {
+			return null;
+		}
+		CommandResult result = new CommandResult();
+		if (source.getSource() == CommandSource.Source.USER && !hasPerm(source.getUser(), "admin.gc")) {
+			return result.setReturnType(ReturnType.NOTICE).setBody("You don't have permission!").setTarget(source.getUser().getNick());
+		}
+
+		System.gc();
+
+		return get(ReturnType.MESSAGE, "Invoked System.gc()", source, context);
 	}
 }
