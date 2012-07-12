@@ -104,7 +104,8 @@ public class AdminCommands {
 		} else {
 			Cyborg.getInstance().partChannel(channel);
 		}
-		return result.setReturnType(ReturnType.MESSAGE).setBody("Parting channel '" + context.getArgs()[0] + "'").setTarget(context.getLocationType() == CommandContext.LocationType.CHANNEL ? context.getLocation() : source.getUser().getNick());
+		String nick = source.getSource() == CommandSource.Source.TERMINALUSER ? null : source.getUser().getNick();
+		return result.setReturnType(ReturnType.MESSAGE).setBody("Parting channel '" + context.getArgs()[0] + "'").setTarget(context.getLocationType() == CommandContext.LocationType.CHANNEL ? context.getLocation() : nick);
 	}
 
 	@Command(name = "echo", desc = "Sends message to target", aliases = {"e", "say"})
@@ -252,7 +253,7 @@ public class AdminCommands {
 		String totalMemory = FileUtils.byteCountToDisplaySize(Runtime.getRuntime().totalMemory());
 
 		StringBuilder builder = new StringBuilder();
-		builder.append("Maximum Mem: ").append(maxMemory).append(", Used Memory: ").append(totalMemory).append(", Free Memeory: ").append(freeMemory);
+		builder.append("Maximum Memory: ").append(maxMemory).append(", Used Memory: ").append(totalMemory).append(", Free Memory: ").append(freeMemory);
 		return get(ReturnType.MESSAGE, builder.toString(), source, context);
 	}
 
